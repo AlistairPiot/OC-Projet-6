@@ -1,28 +1,33 @@
-// recovery of works
-let titre = "Voici un nouveau titre";
+// Fonction pour effectuer la requête Fetch et manipuler les données
+async function fetchProjects() {
+    try {
+        const response = await fetch("http://localhost:5678/api/works");
+        const projects = await response.json();
 
-let h1 = document.createElement("h1");
-h1.innerText = titre;
+        // Retrieving the gallery from the DOM
+        const gallery = document.querySelector(".gallery");
 
-let gallery = document.querySelector(".gallery");
-gallery.appendChild(h1);
+        // Parcourir les projets et ajouter chaque projet à la galerie
+        projects.forEach((project) => {
+            const projectElement = document.createElement("figure");
+            const imgElement = document.createElement("img");
+            const figcaptionElement = document.createElement("figcaption");
 
-export function ajoutListenersAvis() {
-    const piecesElements = document.querySelectorAll(".fiches article button");
+            imgElement.src = project.imageUrl;
+            imgElement.alt = project.title;
 
-    for (let i = 0; i < piecesElements.length; i++) {
-        piecesElements[i].addEventListener("click", async function (event) {
-            const id = event.target.dataset.id;
-            const reponse = await fetch(
-                "http://localhost:8081/pieces/" + id + "/avis"
-            );
-            const avis = await reponse.json();
-            window.localStorage.setItem(
-                `avis-piece-${id}`,
-                JSON.stringify(avis)
-            );
-            const pieceElement = event.target.parentElement;
-            afficherAvis(pieceElement, avis);
+            figcaptionElement.textContent = project.title;
+
+            projectElement.appendChild(imgElement);
+            projectElement.appendChild(figcaptionElement);
+
+            // Add project to gallery
+            gallery.appendChild(projectElement);
         });
+    } catch (error) {
+        console.error("Erreur lors de la récupération des projets:", error);
     }
 }
+
+// Call the fetchProjects function when the page loads
+window.addEventListener("load", fetchProjects);
