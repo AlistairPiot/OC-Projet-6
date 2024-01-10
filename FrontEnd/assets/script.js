@@ -1,15 +1,36 @@
-/*--- Step 1.1 : Retrieving jobs from the back-end ---*/
+//*--- Step 1.1 : Retrieving jobs from the back-end ---*//
 // Function to perform the Fetch request and manipulate the data
 async function fetchProjects() {
     try {
         const response = await fetch("http://localhost:5678/api/works");
         const projects = await response.json();
 
-        // Retrieving the gallery from the DOM
-        const gallery = document.querySelector(".gallery");
+        // Storing projects globally for later use
+        window.projects = projects;
 
-        // Browse projects and add each project to the gallery
-        projects.forEach((project) => {
+        // Call the function to display all projects initially
+        filterProjects(0);
+    } catch (error) {
+        console.error("Erreur lors de la récupération des projets:", error);
+    }
+}
+
+//*--- Step 1.1 : Project recovery / 1.2 : Function to filter projects based on category ---*//
+function filterProjects(categoryId) {
+    // Retrieving the gallery from the DOM
+    const gallery = document.querySelector(".gallery");
+
+    // Clearing the gallery
+    while (gallery.firstChild) {
+        gallery.removeChild(gallery.firstChild);
+    }
+
+    // Get projects from global variable
+    const projects = window.projects;
+
+    // Browse projects and add each project to the gallery
+    projects.forEach((project) => {
+        if (categoryId === 0 || project.categoryId === categoryId) {
             const projectElement = document.createElement("figure");
             const imgElement = document.createElement("img");
             const figcaptionElement = document.createElement("figcaption");
@@ -24,23 +45,22 @@ async function fetchProjects() {
 
             // Add project to gallery
             gallery.appendChild(projectElement);
-        });
-    } catch (error) {
-        console.error("Erreur lors de la récupération des projets:", error);
-    }
+        }
+    });
 }
 
 // Call the fetchProjects function when the page loads
 window.addEventListener("load", fetchProjects);
 
-/* ---------- NEXT STEP ----------*/
-/*--- Step 1.2 : Filtering the work ---*/
+//*--- Step 1.2 : Add buttons + active class ---*//
 // Retrieve the div element with the "group-buttons" class
 const groupButtonsDiv = document.getElementById("group-buttons");
 
 // Table of button contents
 const buttonLabels = ["Tous", "Objets", "Appartements", "Hôtels & restaurants"];
 
+//*--- Create a set to store unique categories ---*//
+const uniqueCategories = new Set();
 // Loop to create and add buttons to the div
 for (let i = 0; i < buttonLabels.length; i++) {
     let button = document.createElement("button");
@@ -49,15 +69,31 @@ for (let i = 0; i < buttonLabels.length; i++) {
     button.textContent = buttonLabels[i];
     groupButtonsDiv.appendChild(button);
 
-    // Ajouter un gestionnaire d'événements pour le clic sur le bouton
+    // Add the category to the uniqueCategories set
+    uniqueCategories.add(buttonLabels[i]);
+
+    // Add event listener for button click
     button.addEventListener("click", function () {
-        // Supprimer la classe "active" de tous les boutons
+        // Remove "active" class from all buttons
         const allButtons = groupButtonsDiv.getElementsByClassName("btn");
         for (let j = 0; j < allButtons.length; j++) {
             allButtons[j].classList.remove("active");
         }
 
-        // Ajouter la classe "active" au bouton cliqué
+        // Add "active" class to the clicked button
         this.classList.add("active");
+
+        // Get the index of the clicked button
+        const buttonIndex = Array.from(allButtons).indexOf(this);
+
+        // Filter projects based on the corresponding category
+        filterProjects(buttonIndex);
     });
 }
+
+//*--- Step 1.2 : Filtering the work ---*//
+const login = document.getElementById("login");
+
+login.addEventListener("click", () => {
+    document.querySelector(".main").innerHTML = "";
+});
