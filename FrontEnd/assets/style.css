@@ -202,8 +202,32 @@ li:hover {
 }
 #portfolio h2 {
     text-align: center;
+    margin-top: 3em;
     margin-bottom: 1em;
 }
+#portfolio .group-buttons {
+    display: flex;
+    justify-content: center;
+}
+#portfolio .group-buttons .btn {
+    margin: 25px 5px 50px 5px;
+    align-items: center;
+    background-color: #ffffff;
+    color: #1d6154;
+    border: 1px solid #1d6154;
+    padding: 0px 8px;
+    border-radius: 60px;
+    font-family: Syne;
+    font-size: 17px;
+    min-width: 100px;
+    height: 40px;
+}
+#portfolio .group-buttons .active {
+    background-color: #1d6154;
+    color: #ffffff;
+    transition: 0.2s ease;
+}
+
 .gallery {
     width: 100%;
     display: grid;
