@@ -17,6 +17,15 @@ async function fetchProjects() {
 
 //*--- Step 1.1 : Project recovery / 1.2 : Function to filter projects based on category ---*//
 function filterProjects(categoryId) {
+    // Get projects from global variable
+    const projects = window.projects;
+
+    // Filter projects based on the category
+    const filteredProjects =
+        categoryId === 0
+            ? projects
+            : projects.filter((project) => project.categoryId === categoryId);
+
     // Retrieving the gallery from the DOM
     const gallery = document.querySelector(".gallery");
 
@@ -25,27 +34,22 @@ function filterProjects(categoryId) {
         gallery.removeChild(gallery.firstChild);
     }
 
-    // Get projects from global variable
-    const projects = window.projects;
+    // Add each filtered project to the gallery
+    filteredProjects.forEach((project) => {
+        const projectElement = document.createElement("figure");
+        const imgElement = document.createElement("img");
+        const figcaptionElement = document.createElement("figcaption");
 
-    // Browse projects and add each project to the gallery
-    projects.forEach((project) => {
-        if (categoryId === 0 || project.categoryId === categoryId) {
-            const projectElement = document.createElement("figure");
-            const imgElement = document.createElement("img");
-            const figcaptionElement = document.createElement("figcaption");
+        imgElement.src = project.imageUrl;
+        imgElement.alt = project.title;
 
-            imgElement.src = project.imageUrl;
-            imgElement.alt = project.title;
+        figcaptionElement.textContent = project.title;
 
-            figcaptionElement.textContent = project.title;
+        projectElement.appendChild(imgElement);
+        projectElement.appendChild(figcaptionElement);
 
-            projectElement.appendChild(imgElement);
-            projectElement.appendChild(figcaptionElement);
-
-            // Add project to gallery
-            gallery.appendChild(projectElement);
-        }
+        // Add project to gallery
+        gallery.appendChild(projectElement);
     });
 }
 
@@ -91,9 +95,4 @@ for (let i = 0; i < buttonLabels.length; i++) {
     });
 }
 
-//*--- Step 1.2 : Filtering the work ---*//
-const login = document.getElementById("login");
-
-login.addEventListener("click", () => {
-    document.querySelector(".main").innerHTML = "";
-});
+//*--- Step 2.2 : Filtering the work ---*//
