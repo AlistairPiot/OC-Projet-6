@@ -104,29 +104,3 @@ if (groupButtonsDiv) {
         });
     }
 }
-
-//*--- Step 2.2 : User authentication ---*//
-// Retrieve the form
-document
-    .querySelector('.form-login input[type="submit"]')
-    .addEventListener("click", function () {
-        for (let input of document.querySelectorAll(".form-login input")) {
-            input.setCustomValidity("hello");
-            input.reportValidity();
-        }
-    });
-
-// document
-// .querySelector('.form-login input[type="submit"]')
-// .addEventListener("click", function () {
-//     var valid = true;
-//     for (let input of document.querySelectorAll(".form-login input")) {
-//         valid &= input.reportValidity();
-//         if (!valid) {
-//             break;
-//         }
-//     }
-//     if (valid) {
-//         alert("Votre message a bien été envoyé !");
-//     }
-// });
