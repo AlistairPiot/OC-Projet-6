@@ -29,28 +29,31 @@ function filterProjects(categoryId) {
     // Retrieving the gallery from the DOM
     const gallery = document.querySelector(".gallery");
 
-    // Clearing the gallery
-    while (gallery.firstChild) {
-        gallery.removeChild(gallery.firstChild);
+    // Check if gallery is not null before clearing its children
+    if (gallery) {
+        // Clearing the gallery
+        while (gallery.firstChild) {
+            gallery.removeChild(gallery.firstChild);
+        }
+
+        // Add each filtered project to the gallery
+        filteredProjects.forEach((project) => {
+            const projectElement = document.createElement("figure");
+            const imgElement = document.createElement("img");
+            const figcaptionElement = document.createElement("figcaption");
+
+            imgElement.src = project.imageUrl;
+            imgElement.alt = project.title;
+
+            figcaptionElement.textContent = project.title;
+
+            projectElement.appendChild(imgElement);
+            projectElement.appendChild(figcaptionElement);
+
+            // Add project to gallery
+            gallery.appendChild(projectElement);
+        });
     }
-
-    // Add each filtered project to the gallery
-    filteredProjects.forEach((project) => {
-        const projectElement = document.createElement("figure");
-        const imgElement = document.createElement("img");
-        const figcaptionElement = document.createElement("figcaption");
-
-        imgElement.src = project.imageUrl;
-        imgElement.alt = project.title;
-
-        figcaptionElement.textContent = project.title;
-
-        projectElement.appendChild(imgElement);
-        projectElement.appendChild(figcaptionElement);
-
-        // Add project to gallery
-        gallery.appendChild(projectElement);
-    });
 }
 
 // Call the fetchProjects function when the page loads
@@ -59,40 +62,71 @@ window.addEventListener("load", fetchProjects);
 //*--- Step 1.2 : Add buttons + active class ---*//
 // Retrieve the div element with the "group-buttons" class
 const groupButtonsDiv = document.getElementById("group-buttons");
+// Check if groupButtonsDiv is not null before adding buttons
+if (groupButtonsDiv) {
+    // Table of button contents
+    const buttonLabels = [
+        "Tous",
+        "Objets",
+        "Appartements",
+        "Hôtels & restaurants",
+    ];
 
-// Table of button contents
-const buttonLabels = ["Tous", "Objets", "Appartements", "Hôtels & restaurants"];
+    //*--- Create a set to store unique categories ---*//
+    const uniqueCategories = new Set();
+    // Loop to create and add buttons to the div
+    for (let i = 0; i < buttonLabels.length; i++) {
+        let button = document.createElement("button");
+        // Add the "active" class to the first button
+        button.className = "btn" + (i === 0 ? " active" : "");
+        button.textContent = buttonLabels[i];
+        groupButtonsDiv.appendChild(button);
 
-//*--- Create a set to store unique categories ---*//
-const uniqueCategories = new Set();
-// Loop to create and add buttons to the div
-for (let i = 0; i < buttonLabels.length; i++) {
-    let button = document.createElement("button");
-    // Add the "active" class to the first button
-    button.className = "btn" + (i === 0 ? " active" : "");
-    button.textContent = buttonLabels[i];
-    groupButtonsDiv.appendChild(button);
+        // Add the category to the uniqueCategories set
+        uniqueCategories.add(buttonLabels[i]);
 
-    // Add the category to the uniqueCategories set
-    uniqueCategories.add(buttonLabels[i]);
+        // Add event listener for button click
+        button.addEventListener("click", function () {
+            // Remove "active" class from all buttons
+            const allButtons = groupButtonsDiv.getElementsByClassName("btn");
+            for (let j = 0; j < allButtons.length; j++) {
+                allButtons[j].classList.remove("active");
+            }
 
-    // Add event listener for button click
-    button.addEventListener("click", function () {
-        // Remove "active" class from all buttons
-        const allButtons = groupButtonsDiv.getElementsByClassName("btn");
-        for (let j = 0; j < allButtons.length; j++) {
-            allButtons[j].classList.remove("active");
-        }
+            // Add "active" class to the clicked button
+            this.classList.add("active");
 
-        // Add "active" class to the clicked button
-        this.classList.add("active");
+            // Get the index of the clicked button
+            const buttonIndex = Array.from(allButtons).indexOf(this);
 
-        // Get the index of the clicked button
-        const buttonIndex = Array.from(allButtons).indexOf(this);
-
-        // Filter projects based on the corresponding category
-        filterProjects(buttonIndex);
-    });
+            // Filter projects based on the corresponding category
+            filterProjects(buttonIndex);
+        });
+    }
 }
 
-//*--- Step 2.2 : Filtering the work ---*//
+//*--- Step 2.2 : User authentication ---*//
+// Retrieve the form
+document
+    .querySelector('.form-login input[type="submit"]')
+    .addEventListener("click", function () {
+        for (let input of document.querySelectorAll(".form-login input")) {
+            input.setCustomValidity("hello");
+            input.reportValidity();
+        }
+    });
+
+// document
+// .querySelector('.form-login input[type="submit"]')
+// .addEventListener("click", function () {
+//     var valid = true;
+//     for (let input of document.querySelectorAll(".form-login input")) {
+//         valid &= input.reportValidity();
+//         if (!valid) {
+//             break;
+//         }
+//     }
+//     if (valid) {
+//         alert("Votre message a bien été envoyé !");
+//     }
+// });
