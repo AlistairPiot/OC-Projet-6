@@ -1,46 +1,85 @@
 //*--- Step 2.2 : User authentication ---*//
-// Retrieve the form
-/*
-document
-    .querySelector('.form-login input[type="submit"]')
-    .addEventListener("click", function () {
-        for (let input of document.querySelectorAll(
-            '.form-login input[type="submit"],.form-login input[type="password"'
-        )) {
-            input.setCustomValidity("hello");
-            input.reportValidity();
-        }
-    });   
-*/
+//The event is triggered when the entire DOM is loaded and ready to be manipulated by the script
+document.addEventListener("DOMContentLoaded", function () {
+    // Attach a submit event listener to the login form
+    document
+        .querySelector("#form-login")
+        .addEventListener("submit", function (e) {
+            e.preventDefault();
+            loginUser();
+        });
+});
 
-document
-    .querySelector("#form-login")
-    .addEventListener("submit", function (event) {
-        // Prevent the form from being sent by default
-        event.preventDefault();
+async function loginUser() {
+    // Definition of the API URL
+    const url = "http://localhost:5678/api/users/login";
 
-        // Set the valid variable to true
-        let valid = true;
+    // Retrieve user input from the form
+    const emailInput = document.querySelector("#email"); // Update with your actual input IDs
 
-        // Browse all input fields except the "submit" field
-        for (let input of this.querySelectorAll('input:not([type="submit"])')) {
-            // Check if the field is empty
-            if (input.value.trim() === "") {
-                valid = false;
-                break;
-            }
+    const passwordInput = document.querySelector("#password"); // Update with your actual input IDs
 
-            valid &= input.reportValidity();
-            if (!valid) {
-                break;
-            }
-        }
+    // Data to be sent in the request body (credential information)
+    const data = {
+        email: emailInput.value,
+        password: passwordInput.value,
+    };
 
-        if (valid) {
-            alert("Votre login a bien été validé !");
-            // Redirect to index.html
+    try {
+        // Using the fetch function to make an HTTP POST request
+        const response = await fetch(url, {
+            method: "POST", // Specifying the HTTP method
+            headers: {
+                Accept: "application/json", // Indicating that the client accepts responses in JSON format
+
+                "Content-Type": "application/json", // Indicating the content type of the request as JSON
+            },
+            body: JSON.stringify(data), // Converting the data to JSON and sending it in the request body
+        });
+        // alert("Vous êtes connecté ^^");
+        if (response.ok) {
+            // Handling the successful response
+            const responseData = await response.json();
+
+            // Store the authentication token in localStorage
+            localStorage.setItem("authToken", responseData.token);
+
+            // Redirect to the home page
             window.location.href = "../../index.html";
+
+            // Check if the user is authenticated and show the "edition" div
+            checkAuthentication();
         } else {
-            alert("Veuillez remplir tous les champs correctement.");
+            // Handling unsuccessful response (for exemple, invalid credentials)
+            const errorData = await response.json();
+            console.error("Error during login:", errorData.message);
         }
-    });
+    } catch (error) {
+        // Handling errors during the request
+        console.error("Error during the request:", error);
+    }
+}
+
+// Function to check if the user is authenticated and show the "edition" div
+function checkAuthentication() {
+    // Retrieve the "edition" div container
+    const editionContainer = document.getElementById("edition");
+
+    // Check if the authentication token is present in localStorage
+    const authToken = localStorage.getItem("authToken");
+
+    if (editionContainer) {
+        // Check if the element exists before manipulating its style
+        if (authToken) {
+            // User is authenticated, show the "edition" div
+            editionContainer.style.display = "flex";
+        } else {
+            editionContainer.style.display = "none";
+        }
+    } else {
+        console.error("Element with ID 'edition' not found.");
+    }
+}
+
+// Call the checkAuthentication function when the page loads
+window.addEventListener("load", checkAuthentication);
