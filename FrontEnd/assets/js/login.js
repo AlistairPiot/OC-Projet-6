@@ -64,17 +64,23 @@ async function loginUser() {
 function checkAuthentication() {
     // Retrieve the "edition" div container
     const editionContainer = document.getElementById("edition");
+    const editMode = document.querySelector(".edit-mode");
+    const groupButtons = document.querySelector(".group-buttons");
 
     // Check if the authentication token is present in localStorage
     const authToken = localStorage.getItem("authToken");
 
-    if (editionContainer) {
+    if (editionContainer && editMode) {
         // Check if the element exists before manipulating its style
         if (authToken) {
             // User is authenticated, show the "edition" div
             editionContainer.style.display = "flex";
+            editMode.style.display = "flex";
+            groupButtons.style.display = "none";
         } else {
             editionContainer.style.display = "none";
+            editMode.style.display = "none";
+            groupButtons.style.display = "flex";
         }
     } else {
         console.error("Element with ID 'edition' not found.");
