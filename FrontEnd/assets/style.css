@@ -250,6 +250,10 @@ section {
     color: #000000;
 }
 
+#portfolio .projet .edit-mode .icon .svg-inline--fa:hover {
+    color: #000000;
+}
+
 #portfolio .group-buttons {
     display: flex;
     justify-content: center;
@@ -414,19 +418,20 @@ footer nav ul {
     /* in case of overflow => scroll bar*/
     overflow: auto;
     width: 600px;
-    height: 600px;
-    padding: 20px;
+    height: 725px;
+    padding: 40px 80px 30px 80px;
     background-color: #fff;
     animation: slideFromTop 0.3s both;
     border-radius: 10px;
-    display: grid;
-    grid-template-columns: 1fr 1fr 1fr;
-    grid-column-gap: 20px;
-    grid-row-gap: 20px;
 }
 
-.modal-wrapper .img {
-    width: 100px;
+.modal-wrapper h1 {
+    font-size: 26px;
+    align-items: center;
+    font-family: Work Sans;
+    font-weight: 400;
+    color: #000000;
+    margin-bottom: 30px;
 }
 
 .modal-wrapper .icon {
@@ -435,14 +440,21 @@ footer nav ul {
     font-size: 24px;
 }
 
-.svg-inline--fa:hover {
+.icon .svg-inline--fa:hover {
     color: red;
 }
 
-.modal-wrapper h1 {
-    font-size: 26px;
-    align-items: center;
-    color: #000000;
+.modal-wrapper .grid-projects {
+    width: 100;
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr 1fr 1fr;
+    grid-column-gap: 0px;
+    grid-row-gap: 30px;
+    margin-bottom: 70px;
+}
+
+.modal-wrapper .img {
+    width: 100px;
 }
 
 .modal-wrapper .horizontal-line {
@@ -456,7 +468,6 @@ footer nav ul {
     display: flex;
     justify-content: center;
     align-items: center;
-    margin: 25px 5px 50px 5px;
     background-color: #1d6154;
     color: #ffffff;
     border: 1px solid #1d6154;
@@ -464,12 +475,7 @@ footer nav ul {
     border-radius: 60px;
     font-family: Syne;
     font-size: 14px;
-    min-width: 100px;
     height: 40px;
-}
-
-.modal-wrapper input {
-    border: none;
 }
 
 .modal[aria-hidden="true"] {
@@ -478,6 +484,10 @@ footer nav ul {
 
 .modal[aria-hidden="true"] .modal-wrapper {
     animation-name: slideToBottom;
+}
+/* Block scrolling when the modal is displayed */
+body.modal-open {
+    overflow: hidden;
 }
 
 @keyframes fadeIn {
