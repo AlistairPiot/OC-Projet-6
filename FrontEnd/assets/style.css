@@ -418,8 +418,8 @@ footer nav ul {
     /* in case of overflow => scroll bar*/
     overflow: auto;
     width: 600px;
-    height: 725px;
-    padding: 40px 80px 30px 80px;
+    height: 650px;
+    padding: 15px 80px 15px 80px;
     background-color: #fff;
     animation: slideFromTop 0.3s both;
     border-radius: 10px;
@@ -431,7 +431,7 @@ footer nav ul {
     font-family: Work Sans;
     font-weight: 400;
     color: #000000;
-    margin-bottom: 30px;
+    margin-bottom: 20px;
 }
 
 .modal-wrapper .icon {
@@ -445,16 +445,19 @@ footer nav ul {
 }
 
 .modal-wrapper .grid-projects {
-    width: 100;
+    width: 100%;
     display: grid;
-    grid-template-columns: 1fr 1fr 1fr 1fr 1fr;
-    grid-column-gap: 0px;
+    grid-template-columns: repeat(5, 1fr);
+    grid-column-gap: 0;
     grid-row-gap: 30px;
-    margin-bottom: 70px;
+    margin-bottom: 30px;
+    justify-content: center;
+    align-items: center;
 }
 
 .modal-wrapper .img {
-    width: 100px;
+    width: 90%;
+    height: auto;
 }
 
 .modal-wrapper .horizontal-line {
@@ -462,7 +465,6 @@ footer nav ul {
     width: 100%;
     height: 1px;
     background-color: #b3b3b3;
-    margin: 20px auto;
 }
 .modal-wrapper .edit-input {
     display: flex;
@@ -472,6 +474,7 @@ footer nav ul {
     color: #ffffff;
     border: 1px solid #1d6154;
     padding: 0px 23%;
+    margin-bottom: 0px;
     border-radius: 60px;
     font-family: Syne;
     font-size: 14px;
@@ -484,10 +487,6 @@ footer nav ul {
 
 .modal[aria-hidden="true"] .modal-wrapper {
     animation-name: slideToBottom;
-}
-/* Block scrolling when the modal is displayed */
-body.modal-open {
-    overflow: hidden;
 }
 
 @keyframes fadeIn {

@@ -38,9 +38,6 @@ const openModal = function (e) {
     e.preventDefault();
     modal = document.querySelector(e.target.getAttribute("href"));
 
-    // Add the class to the body to disable scrolling
-    document.body.classList.add("modal-open");
-
     previouslyFocusedElement = document.querySelector(":focus");
     modal.style.display = null;
     modal.removeAttribute("aria-hidden");
