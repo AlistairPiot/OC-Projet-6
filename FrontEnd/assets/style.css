@@ -396,7 +396,7 @@ footer nav ul {
     font-family: Works Sans;
 }
 
-/* Création de la modal */
+/** Modal **/
 .modal {
     position: fixed;
     display: flex;
@@ -414,12 +414,19 @@ footer nav ul {
     /* in case of overflow => scroll bar*/
     overflow: auto;
     width: 600px;
-    max-width: calc(100vw - 20px);
-    max-height: calc(100vh - 20px);
+    height: 600px;
     padding: 20px;
     background-color: #fff;
     animation: slideFromTop 0.3s both;
     border-radius: 10px;
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    grid-column-gap: 20px;
+    grid-row-gap: 20px;
+}
+
+.modal-wrapper .img {
+    width: 100px;
 }
 
 .modal-wrapper .icon {

@@ -53,6 +53,7 @@ async function loginUser() {
             // Handling unsuccessful response (for exemple, invalid credentials)
             const errorData = await response.json();
             console.error("Error during login:", errorData.message);
+            alert("Erreur dans l’identifiant ou le mot de passe");
         }
     } catch (error) {
         // Handling errors during the request

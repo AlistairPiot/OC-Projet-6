@@ -1,3 +1,33 @@
+//* Displaying projects with an API *//
+// Fonction pour effectuer la requête Fetch et manipuler les données
+async function fetchProjects() {
+    try {
+        const response = await fetch("http://localhost:5678/api/works");
+        const projects = await response.json();
+
+        // Retrieving the parent element from the DOM
+        const gallery2 = document.querySelector(".modal-wrapper");
+
+        // Parcourir les projets et ajouter chaque projet à la galerie
+        projects.forEach((project) => {
+            const projectElement = document.createElement("figure");
+            const imgElement = document.createElement("img");
+            imgElement.src = project.imageUrl;
+            imgElement.alt = project.title;
+
+            imgElement.classList.add("img");
+
+            projectElement.appendChild(imgElement);
+
+            // Add project to gallery
+            gallery2.appendChild(projectElement);
+        });
+    } catch (error) {
+        console.error("Erreur lors de la récupération des projets:", error);
+    }
+}
+
+//* Modal *//
 let modal = null;
 const focusableSelector = "button, input, a";
 let focusables = [];
@@ -19,6 +49,8 @@ const openModal = function (e) {
     modal
         .querySelector(".js-modal-stop")
         .addEventListener("click", stopPropagation);
+
+    fetchProjects();
 };
 
 const closeModal = function (e) {
@@ -46,37 +78,6 @@ const stopPropagation = function (e) {
     e.stopPropagation();
 };
 
-const focusInModal = function (e) {
-    e.preventDefault();
-    let index = focusables.findIndex(
-        (f) => f === modal.querySelector(":focus")
-    );
-    index++;
-    if (e.shiftkey === true) {
-        index--;
-    } else {
-        index++;
-    }
-    if (index >= focusables.length) {
-        index = 0;
-    }
-    if (index < 0) {
-        index = focusables.length - 1;
-    }
-    focusables[index].focus();
-};
-
 document.querySelectorAll(".js-modal").forEach((a) => {
     a.addEventListener("click", openModal);
 });
-
-window.addEventListener("keydown", function (e) {
-    if (e.key === "Escape" || e.key === "Esc") {
-        closeModal(e);
-    }
-    if (e.key === "Tab" && modal != null) {
-        focusInModal(e);
-    }
-});
-
-//* Récupération des travaux *//
