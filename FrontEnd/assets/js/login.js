@@ -15,9 +15,9 @@ async function loginUser() {
     const url = "http://localhost:5678/api/users/login";
 
     // Retrieve user input from the form
-    const emailInput = document.querySelector("#email"); // Update with your actual input IDs
+    const emailInput = document.querySelector("#email");
 
-    const passwordInput = document.querySelector("#password"); // Update with your actual input IDs
+    const passwordInput = document.querySelector("#password");
 
     // Data to be sent in the request body (credential information)
     const data = {

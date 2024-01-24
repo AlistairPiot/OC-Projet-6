@@ -81,7 +81,15 @@
 						<i class="fa-solid fa-xmark js-modal-close"></i>
 					</div>
 					<h1 id="titleModalAjout">Ajout photo</h1>
-					<input class="edit-input" type="submit" value="Ajouter une photo">
+					<form id="form-ajout" action="#" method="post" enctype="multipart/form-data">
+						<label for="image">Image</label>
+						<input type="file" name="image" id="image" accept="image/*">
+						<label for="text">Titre</label>
+						<input type="text" name="titre" id="titre" />
+						<label for="text">Catégorie</label>
+						<input type="text" name="categorie" id="categorie" />
+						<button id="valider-ajout" class="edit-input">Valider</button>
+					</form>
 				</div>
 			</aside>
 			<div id="group-buttons" class="group-buttons"></div>

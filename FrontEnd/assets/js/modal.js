@@ -110,6 +110,9 @@ function openModalAjout(e) {
     modalAjout
         .querySelector(".js-modal-stop")
         .addEventListener("click", stopPropagation);
+    modalAjout
+        .querySelector(".valider-ajout")
+        .addEventListener("click", fetchAddProjects);
 }
 
 function closeModalAjout(e) {
@@ -125,4 +128,39 @@ function closeModalAjout(e) {
     modalAjout
         .querySelector(".js-modal-stop")
         .removeEventListener("click", stopPropagation);
+}
+
+// Fonction pour récupérer les données du formulaire
+function getFormData() {
+    const formData = new FormData(document.getElementById("form-ajout"));
+    const data = {};
+
+    // Convertir FormData en un objet simple
+    formData.forEach((value, key) => {
+        data[key] = value;
+    });
+
+    return data;
+}
+
+async function fetchAddProjects() {
+    try {
+        const projectData = getFormData();
+
+        const response = await fetch("http://localhost:5678/api/works", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify(projectData),
+        });
+
+        // Traitez la réponse ici
+        console.log("Response:", response);
+
+        // Call fetchProjects() to update the list of projects after adding a new one
+        fetchProjects();
+    } catch (error) {
+        console.error("Erreur lors de l'ajout du projet:", error);
+    }
 }
