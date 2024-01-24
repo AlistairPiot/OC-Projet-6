@@ -6,24 +6,26 @@ async function fetchProjects() {
         const projects = await response.json();
 
         // Retrieving the parent element from the DOM
-        const gallery2 = document.querySelector(".grid-projects");
+        const gridProjects = document.querySelector(".grid-projects");
 
         // Clear existing projects in the gallery
-        gallery2.innerHTML = "";
+        gridProjects.innerHTML = "";
 
         // Parcourir les projets et ajouter chaque projet à la galerie
         projects.forEach((project) => {
             const projectElement = document.createElement("figure");
             const imgElement = document.createElement("img");
+            const deleteIcon = document.createElement("i");
             imgElement.src = project.imageUrl;
             imgElement.alt = project.title;
-
             imgElement.classList.add("img");
+            deleteIcon.classList.add("fa-solid", "fa-trash-can", "delete-icon");
 
             projectElement.appendChild(imgElement);
+            projectElement.appendChild(deleteIcon);
 
-            // Add project to gallery
-            gallery2.appendChild(projectElement);
+            // Add project to the grid Projects
+            gridProjects.appendChild(projectElement);
         });
     } catch (error) {
         console.error("Erreur lors de la récupération des projets:", error);
