@@ -24,7 +24,7 @@ async function fetchProjects() {
             projectElement.appendChild(imgElement);
             projectElement.appendChild(deleteIcon);
 
-            // Add project to the grid Projects
+            //Add project to the grid Projects
             gridProjects.appendChild(projectElement);
         });
     } catch (error) {
@@ -32,135 +32,47 @@ async function fetchProjects() {
     }
 }
 
-//* Modal *//
-let modal = null;
-let previouslyFocusedElement = null;
+//* Modal 1 *//
+// Recovery of DOM elements modal 1
+const modalContainer = document.querySelector(".modal-container-js");
+const btnOpen = document.querySelector(".modal-btn-open-js");
+const btnClose = document.getElementById("icon-close");
+const btnAjout = document.querySelector(".btn-ajout-js");
 
-const openModal = function (e) {
-    e.preventDefault();
-    modal = document.querySelector(e.target.getAttribute("href"));
-
-    previouslyFocusedElement = document.querySelector(":focus");
-    modal.style.display = null;
-    modal.removeAttribute("aria-hidden");
-    modal.setAttribute("aria-modal", "true");
-    modal.addEventListener("click", closeModal);
-    modal
-        .querySelector(".js-modal-close")
-        .addEventListener("click", closeModal);
-    modal
-        .querySelector(".js-modal-stop")
-        .addEventListener("click", stopPropagation);
-
+// Open the modal when the trigger button "modifier" is clicked
+btnOpen.addEventListener("click", openModal);
+function openModal() {
+    modalContainer.classList.add("active");
     fetchProjects();
-};
+}
 
-const closeModal = function (e) {
-    if (modal === null) return;
-    if (previouslyFocusedElement !== null) previouslyFocusedElement.focus();
-    e.preventDefault();
-    modal.setAttribute("aria-hidden", "true");
-    modal.removeAttribute("aria-modal");
-    modal.removeEventListener("click", closeModal);
+// Close the modal when the close button is clicked
+btnClose.addEventListener("click", closeModal);
+function closeModal() {
+    modalContainer.classList.remove("active");
+}
 
-    // Delete the body class to reactivate scrolling
-    document.body.classList.remove("modal-open");
+//* Modal 2 *//
 
-    modal
-        .querySelector(".js-modal-close")
-        .removeEventListener("click", closeModal);
-    modal
-        .querySelector(".js-modal-stop")
-        .removeEventListener("click", stopPropagation);
-    const hideModal = function () {
-        modal.style.display = "none";
-        modal.removeEventListener("animationend", hideModal);
-        modal = null;
-    };
-    modal.addEventListener("animationend", hideModal);
-};
+const modalContainer2 = document.querySelector(".modal-container-2-js");
+const btnClose2 = document.getElementById("icon-close-2");
+const returnArrow = document.getElementById("icon-return-js");
 
-const stopPropagation = function (e) {
-    e.stopPropagation();
-};
-
-document.querySelectorAll(".js-modal").forEach((a) => {
-    a.addEventListener("click", openModal);
-});
-
-//* Modal ajout *//
-// Recovery of the button "Ajout photo"
-const btnAjout = document.getElementById("btn-ajout-js");
-// Retrieving the parent element from the DOM
-const modalAjout = document.getElementById("modal2");
-
+// Open the Modal2 the trigger button "Ajouter une photo" is clicked
 btnAjout.addEventListener("click", openModalAjout);
-
-function openModalAjout(e) {
-    e.preventDefault();
-
-    modal.setAttribute("aria-hidden", "true");
-    modalAjout.style.display = null;
-    modalAjout.removeAttribute("aria-hidden");
-    modalAjout.setAttribute("aria-modal", "true");
-    modalAjout.addEventListener("click", closeModalAjout);
-    modalAjout
-        .querySelector(".js-modal-close")
-        .addEventListener("click", closeModalAjout);
-    modalAjout
-        .querySelector(".js-modal-stop")
-        .addEventListener("click", stopPropagation);
-    modalAjout
-        .querySelector(".valider-ajout")
-        .addEventListener("click", fetchAddProjects);
+function openModalAjout() {
+    modalContainer2.classList.add("active");
 }
 
-function closeModalAjout(e) {
-    e.preventDefault();
-    modal.removeAttribute("aria-hidden");
-    modalAjout.setAttribute("aria-hidden", "true");
-    modalAjout.removeAttribute("aria-modal");
-    modalAjout.removeEventListener("click", closeModalAjout);
-    modalAjout.style.display = "none";
-    modalAjout
-        .querySelector(".js-modal-close")
-        .removeEventListener("click", closeModalAjout);
-    modalAjout
-        .querySelector(".js-modal-stop")
-        .removeEventListener("click", stopPropagation);
+// Return to the modal1 when the "returnArrow" is clicked
+returnArrow.addEventListener("click", closeModal2);
+function closeModal2() {
+    modalContainer2.classList.remove("active");
 }
 
-// Fonction pour récupérer les données du formulaire
-function getFormData() {
-    const formData = new FormData(document.getElementById("form-ajout"));
-    const data = {};
-
-    // Convertir FormData en un objet simple
-    formData.forEach((value, key) => {
-        data[key] = value;
-    });
-
-    return data;
-}
-
-async function fetchAddProjects() {
-    try {
-        const projectData = getFormData();
-
-        const response = await fetch("http://localhost:5678/api/works", {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json",
-            },
-            body: JSON.stringify(projectData),
-        });
-
-        // Traitez la réponse ici
-        console.log("Response:", response);
-
-        // Call fetchProjects() to update the list of projects after adding a new one
-        fetchProjects();
-    } catch (error) {
-        console.error("Erreur lors de l'ajout du projet:", error);
-    }
+// Close the modal2 and the modal1 when the close button is clicked
+btnClose2.addEventListener("click", closeAllModal);
+function closeAllModal() {
+    modalContainer2.classList.remove("active");
+    closeModal();
 }

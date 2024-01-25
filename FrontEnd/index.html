@@ -18,7 +18,7 @@
 </head>
 
 <body class="modal-open">
-	<div id="edition" class="editionX">
+	<div id="edition" class="edition">
 		<i class="fa-regular fa-pen-to-square"></i>
 		<p class="edition-p"> Mode édition</p>
 	</div>
@@ -56,40 +56,33 @@
 					<div class="icon">
 						<i class="fa-regular fa-pen-to-square"></i>
 					</div>
-					<a href="#modal1" id="js-edit-mode" class="js-modal"> Modifier</a>
+					<button class="modal-btn-open modal-btn-open-js">modifier</button>
 				</div>
 			</div>
-			<aside id="modal1" class="modal" aria-hidden="true" role="dialog" aria-labelledby="titleModal"
-				style="display: none;">
-				<div class="modal-wrapper js-modal-stop">
-					<div class="icon">
-						<i class="fa-solid fa-xmark js-modal-close"></i>
+			<aside class="modal-container modal-container-js">
+				<div class="overlay"></div>
+				<div class="modal" role="dialog" aria-labelledby="modalTitle">
+					<div id="icon-close" class="icon">
+						<i class="fa-solid fa-xmark btn-close-js"></i>
 					</div>
-					<h1 id="titleModal">Gallerie photo</h1>
+					<h1 id="modalTitle">Gallerie photo</h1>
 					<div class="grid-projects"></div>
 					<span class="horizontal-line"></span>
-					<input id="btn-ajout-js" class="edit-input" type="submit" value="Ajouter une photo">
+					<button type="submit" class="btn-ajout btn-ajout-js">Ajouter une photo</button>
 				</div>
 			</aside>
-			<aside id="modal2" class="modal" aria-hidden="true" role="dialog" aria-labelledby="titleModalAjout"
-				style="display: none;">
-				<div class="modal-wrapper js-modal-stop">
-					<div class="icon">
+
+			<aside class="modal-container modal-container-2-js">
+				<div class="overlay"></div>
+				<div class="modal" role="dialog" aria-labelledby="modalTitle">
+					<div id="icon-return-js" class="icon-return">
 						<i class="fa-solid fa-arrow-left"></i>
 					</div>
-					<div class="icon">
-						<i class="fa-solid fa-xmark js-modal-close"></i>
+					<div id="icon-close-2" class="icon">
+						<i class="fa-solid fa-xmark btn-close-js"></i>
 					</div>
-					<h1 id="titleModalAjout">Ajout photo</h1>
-					<form id="form-ajout" action="#" method="post" enctype="multipart/form-data">
-						<label for="image">Image</label>
-						<input type="file" name="image" id="image" accept="image/*">
-						<label for="text">Titre</label>
-						<input type="text" name="titre" id="titre" />
-						<label for="text">Catégorie</label>
-						<input type="text" name="categorie" id="categorie" />
-						<button id="valider-ajout" class="edit-input">Valider</button>
-					</form>
+					<h1 id="modalTitle">Ajout photo</h1>
+					<button type="submit" class="btn-ajout">Ajouter une photo</button>
 				</div>
 			</aside>
 			<div id="group-buttons" class="group-buttons"></div>
