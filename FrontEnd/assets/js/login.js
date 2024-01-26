@@ -3,7 +3,7 @@
 document.addEventListener("DOMContentLoaded", function () {
     // Attach a submit event listener to the login form
     document
-        .querySelector("#form-login")
+        .getElementById("form-login")
         .addEventListener("submit", function (e) {
             e.preventDefault();
             loginUser();

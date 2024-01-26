@@ -99,6 +99,7 @@ overlayModal2.addEventListener("click", function (event) {
 document.getElementById("image").addEventListener("change", function (e) {
     const previewContainer = document.querySelector(".image-preview-container");
     const previewImage = document.getElementById("preview-image");
+    const fileLabel = document.getElementById("file-label-js");
     const fileInput = e.target;
     const file = fileInput.files[0];
 
@@ -108,13 +109,110 @@ document.getElementById("image").addEventListener("change", function (e) {
         reader.onload = function (e) {
             previewImage.src = e.target.result;
             previewContainer.style.display = "block"; // Show preview
-            fileLabel.style.display = "none"; //  Hide label
+            fileLabel.classList.add("active");
         };
 
         reader.readAsDataURL(file);
     } else {
         previewImage.src = "#";
         previewContainer.style.display = "none"; // Hide preview
-        fileLabel.style.display = "block"; // Show the label
     }
 });
+
+// ----------------
+document.addEventListener("DOMContentLoaded", function () {
+    completedFormChangeColor();
+});
+
+function completedFormChangeColor() {
+    // Selecting the form and fields
+    const form = document.getElementById("form-ajout");
+    const imageInput = document.getElementById("image");
+    const titreInput = document.getElementById("titre");
+    const categorieSelect = document.getElementById("categorie");
+    const btnValider = document.getElementById("btn-valider-js");
+
+    // Listen to changes in the fields
+    form.addEventListener("input", function () {
+        // Check that all fields have been completed
+        const isImageFilled = imageInput.files.length > 0;
+        const isTitreFilled = titreInput.value.trim() !== "";
+        const isCategorieFilled = categorieSelect.value !== "";
+
+        // Update button colour according to field status
+        if (isImageFilled && isTitreFilled && isCategorieFilled) {
+            btnValider.style.backgroundColor = "#1D6154";
+        } else {
+            btnValider.style.backgroundColor = "";
+        }
+    });
+}
+
+//* Form validation *//
+document.addEventListener("DOMContentLoaded", function () {
+    // Attach a submit event listener to the login form
+    document
+        .getElementById("form-ajout")
+        .addEventListener("submit", function (e) {
+            e.preventDefault();
+            formAjout();
+        });
+});
+
+async function formAjout() {
+    // Retrieve values from the form
+    const titre = document.getElementById("titre").value;
+    const categorie = document.getElementById("categorie").value;
+    const authToken = localStorage.getItem("authToken");
+
+    // Retrieve the image URL
+    const fileInput = document.getElementById("image");
+    const imageFile = fileInput.files[0];
+
+    console.log("AuthToken:", authToken);
+    console.log("Titre:", titre);
+    console.log("Categorie:", categorie);
+    console.log("Image File:", imageFile);
+
+    // Check that all mandatory fields have been completed
+    if (titre && categorie && imageFile) {
+        // Create the data object to be sent to the API
+        const formData = new FormData();
+        formData.append("image", imageFile);
+        formData.append("title", titre);
+        formData.append("category", categorie);
+
+        // Envoi des données à l'API
+        fetch("http://localhost:5678/api/works", {
+            method: "POST",
+            headers: {
+                Authorization: "Bearer " + authToken,
+            },
+            body: formData,
+        })
+            .then((response) => {
+                if (!response.ok) {
+                    throw new Error(
+                        `Erreur HTTP ! Statut : ${response.status}`
+                    );
+                }
+                return response.json();
+            })
+            .then((data) => {
+                // Process the API response if necessary
+                console.log(data);
+                // Refresh the gallery with the new project
+                fetchProjects();
+            })
+            .catch((error) =>
+                console.error(
+                    "Erreur lors de l'envoi des données à l'API:",
+                    error
+                )
+            );
+        // Redirect to the home page
+        //window.location.href = "../../index.html";
+    } else {
+        alert("Veuillez remplir tous les champs obligatoires.");
+    }
+}

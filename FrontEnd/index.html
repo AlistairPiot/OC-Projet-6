@@ -84,7 +84,11 @@
 					<h1 id="modalTitle">Ajout photo</h1>
 					<form id="form-ajout" class="form-ajout" action="#" method="post" enctype="multipart/form-data">
 						<div class="file-input-container">
-							<label for="image" class="file-label">+ Ajouter photo</label>
+							<div class="icon-image">
+								<i class="fa-regular fa-image"></i>
+							</div>
+							<label for="image" id="file-label-js" class="file-label">+ Ajouter photo</label>
+							<p class="file-input-p">jpg, png : 4mo max</p>
 							<input type="file" name="image" id="image" accept="image/*">
 							<div class="image-preview-container">
 								<img id="preview-image" src="#" alt="Image Preview" class="file-preview">
@@ -99,7 +103,7 @@
 							<option value="Hotels & restaurants">Hotels & restaurants</option>
 						</select>
 						<span class="horizontal-line"></span>
-						<button type="submit" class="btn-ajout">Valider</button>
+						<button id="btn-valider-js" type="submit" class="btn-ajout">Valider</button>
 					</form>
 				</div>
 			</aside>
