@@ -160,19 +160,18 @@ document.addEventListener("DOMContentLoaded", function () {
 });
 
 async function formAjout() {
+    // Definition of the API URL
+    const url = "http://localhost:5678/api/works";
     // Retrieve values from the form
     const titre = document.getElementById("titre").value;
     const categorie = document.getElementById("categorie").value;
     const authToken = localStorage.getItem("authToken");
 
+    // Displaying the token
+    console.log("AuthToken:", authToken);
     // Retrieve the image URL
     const fileInput = document.getElementById("image");
     const imageFile = fileInput.files[0];
-
-    console.log("AuthToken:", authToken);
-    console.log("Titre:", titre);
-    console.log("Categorie:", categorie);
-    console.log("Image File:", imageFile);
 
     // Check that all mandatory fields have been completed
     if (titre && categorie && imageFile) {
@@ -182,37 +181,26 @@ async function formAjout() {
         formData.append("title", titre);
         formData.append("category", categorie);
 
-        // Envoi des données à l'API
-        fetch("http://localhost:5678/api/works", {
-            method: "POST",
-            headers: {
-                Authorization: "Bearer " + authToken,
-            },
-            body: formData,
-        })
-            .then((response) => {
-                if (!response.ok) {
-                    throw new Error(
-                        `Erreur HTTP ! Statut : ${response.status}`
-                    );
-                }
-                return response.json();
-            })
-            .then((data) => {
-                // Process the API response if necessary
-                console.log(data);
-                // Refresh the gallery with the new project
-                fetchProjects();
-            })
-            .catch((error) =>
-                console.error(
-                    "Erreur lors de l'envoi des données à l'API:",
-                    error
-                )
-            );
-        // Redirect to the home page
-        //window.location.href = "../../index.html";
+        try {
+            // Send a POST request to add the new project
+            const response = await fetch(url, {
+                method: "POST",
+                headers: {
+                    Authorization: `Bearer ${authToken}`,
+                },
+                body: formData,
+            });
+            if (response.ok) {
+                console.log("Response ok = true");
+                console.log(response);
+            } else {
+                console.log("Response ok = false");
+                console.log(response);
+            }
+        } catch (error) {
+            console.error(error.message);
+        }
     } else {
-        alert("Veuillez remplir tous les champs obligatoires.");
+        alert("Veuillez remplir tous les champs.");
     }
 }
