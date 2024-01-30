@@ -21,6 +21,10 @@ async function fetchProjects() {
             imgElement.classList.add("img");
             deleteIcon.classList.add("fa-solid", "fa-trash-can", "delete-icon");
 
+            deleteIcon.addEventListener("click", () => {
+                console.log("cliqué hehehe");
+            });
+
             projectElement.appendChild(imgElement);
             projectElement.appendChild(deleteIcon);
 
@@ -122,6 +126,12 @@ document.getElementById("image").addEventListener("change", function (e) {
 // ----------------
 document.addEventListener("DOMContentLoaded", function () {
     completedFormChangeColor();
+    document
+        .getElementById("form-ajout")
+        .addEventListener("submit", function (e) {
+            e.preventDefault();
+            formAjout();
+        });
 });
 
 function completedFormChangeColor() {
@@ -149,17 +159,9 @@ function completedFormChangeColor() {
 }
 
 //* Form validation *//
-document.addEventListener("DOMContentLoaded", function () {
-    // Attach a submit event listener to the login form
-    document
-        .getElementById("form-ajout")
-        .addEventListener("submit", function (e) {
-            e.preventDefault();
-            formAjout();
-        });
-});
-
 async function formAjout() {
+    console.log("Début de la fonction formAjout");
+
     // Definition of the API URL
     const url = "http://localhost:5678/api/works";
     // Retrieve values from the form
@@ -167,8 +169,16 @@ async function formAjout() {
     const categorie = document.getElementById("categorie").value;
     const authToken = localStorage.getItem("authToken");
 
+    // Check that authToken is not null
+    if (!authToken) {
+        console.log("Aucun authToken trouvé");
+        // "return" to exit the function
+        return;
+    }
+
     // Displaying the token
-    console.log("AuthToken:", authToken);
+    // console.log("AuthToken:", authToken);
+
     // Retrieve the image URL
     const fileInput = document.getElementById("image");
     const imageFile = fileInput.files[0];
@@ -180,6 +190,12 @@ async function formAjout() {
         formData.append("image", imageFile);
         formData.append("title", titre);
         formData.append("category", categorie);
+
+        // Display formData values
+        console.log("Valeurs de formData :");
+        for (var value of formData.values()) {
+            console.log(value);
+        }
 
         try {
             // Send a POST request to add the new project
@@ -195,10 +211,10 @@ async function formAjout() {
                 console.log(response);
             } else {
                 console.log("Response ok = false");
-                console.log(response);
+                console.log(response.statusText);
             }
         } catch (error) {
-            console.error(error.message);
+            console.error("Erreur dans la requête fetch :", error.message);
         }
     } else {
         alert("Veuillez remplir tous les champs.");
