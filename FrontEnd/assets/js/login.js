@@ -43,6 +43,7 @@ async function loginUser() {
 
             // Store the authentication token in localStorage
             localStorage.setItem("authToken", responseData.token);
+            console.log(responseData.token);
 
             // Redirect to the home page
             window.location.href = "../../index.html";

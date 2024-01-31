@@ -21,10 +21,6 @@ async function fetchProjects() {
             imgElement.classList.add("img");
             deleteIcon.classList.add("fa-solid", "fa-trash-can", "delete-icon");
 
-            deleteIcon.addEventListener("click", () => {
-                console.log("cliqué hehehe");
-            });
-
             projectElement.appendChild(imgElement);
             projectElement.appendChild(deleteIcon);
 
@@ -66,7 +62,6 @@ overlayModal1.addEventListener("click", function (event) {
 });
 
 //* Modal 2 *//
-
 const modalContainer2 = document.querySelector(".modal-container-2-js");
 const btnClose2 = document.getElementById("icon-close-2");
 const returnArrow = document.getElementById("icon-return-js");
@@ -143,7 +138,7 @@ function completedFormChangeColor() {
     const btnValider = document.getElementById("btn-valider-js");
 
     // Listen to changes in the fields
-    form.addEventListener("input", function () {
+    form.addEventListener("input", () => {
         // Check that all fields have been completed
         const isImageFilled = imageInput.files.length > 0;
         const isTitreFilled = titreInput.value.trim() !== "";
@@ -158,10 +153,8 @@ function completedFormChangeColor() {
     });
 }
 
-//* Form validation *//
+//* Add project *//
 async function formAjout() {
-    console.log("Début de la fonction formAjout");
-
     // Definition of the API URL
     const url = "http://localhost:5678/api/works";
     // Retrieve values from the form
@@ -176,9 +169,6 @@ async function formAjout() {
         return;
     }
 
-    // Displaying the token
-    // console.log("AuthToken:", authToken);
-
     // Retrieve the image URL
     const fileInput = document.getElementById("image");
     const imageFile = fileInput.files[0];
@@ -191,12 +181,6 @@ async function formAjout() {
         formData.append("title", titre);
         formData.append("category", categorie);
 
-        // Display formData values
-        console.log("Valeurs de formData :");
-        for (var value of formData.values()) {
-            console.log(value);
-        }
-
         try {
             // Send a POST request to add the new project
             const response = await fetch(url, {
@@ -207,10 +191,8 @@ async function formAjout() {
                 body: formData,
             });
             if (response.ok) {
-                console.log("Response ok = true");
                 console.log(response);
             } else {
-                console.log("Response ok = false");
                 console.log(response.statusText);
             }
         } catch (error) {
