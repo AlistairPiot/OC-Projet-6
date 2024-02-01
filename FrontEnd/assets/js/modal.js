@@ -11,22 +11,30 @@ async function fetchProjects() {
         // Clear existing projects in the gallery
         gridProjects.innerHTML = "";
 
-        // Parcourir les projets et ajouter chaque projet à la galerie
+        // Browse projects and add each one to the gallery
         projects.forEach((project) => {
             const projectElement = document.createElement("figure");
             const imgElement = document.createElement("img");
             const deleteIcon = document.createElement("i");
+            const div = document.createElement("div");
+
+            // Ajoutez l'ID du projet comme une donnée personnalisée (data-id)
+            div.setAttribute("data-id", project.id);
+
             imgElement.src = project.imageUrl;
             imgElement.alt = project.title;
             imgElement.classList.add("img");
+            div.classList.add("div-trash");
             deleteIcon.classList.add("fa-solid", "fa-trash-can", "delete-icon");
 
             projectElement.appendChild(imgElement);
-            projectElement.appendChild(deleteIcon);
+            div.appendChild(deleteIcon);
+            projectElement.appendChild(div);
 
             //Add project to the grid Projects
             gridProjects.appendChild(projectElement);
         });
+        deleteWorks();
     } catch (error) {
         console.error("Erreur lors de la récupération des projets:", error);
     }
@@ -51,6 +59,7 @@ function openModal() {
 btnClose.addEventListener("click", closeModal);
 function closeModal() {
     modalContainer.classList.remove("active");
+    fetchProjects();
 }
 
 // Close the modal when the user clicks outside
@@ -191,14 +200,63 @@ async function formAjout() {
                 body: formData,
             });
             if (response.ok) {
-                console.log(response);
+                alert("Nouveau projet ajouté");
+                closeAllModal();
+                // window.location.href = "../../index.html";
             } else {
                 console.log(response.statusText);
             }
         } catch (error) {
             console.error("Erreur dans la requête fetch :", error.message);
         }
+        fetchProjects();
     } else {
         alert("Veuillez remplir tous les champs.");
     }
+}
+
+// //* Delete a project *//
+function deleteWorks() {
+    // Definition of the API URL
+    const url = "http://localhost:5678/api/works/";
+    // Retrieve the token
+    const authToken = localStorage.getItem("authToken");
+
+    // Check that authToken is not null
+    if (!authToken) {
+        console.log("Aucun authToken trouvé");
+        // "return" to exit the function
+        return;
+    }
+
+    // Check that all mandatory fields have been completed
+    const trashButtons = document.querySelectorAll(".div-trash");
+
+    trashButtons.forEach((trashButton) => {
+        trashButton.addEventListener("click", async () => {
+            try {
+                // Retrieving the project ID from the data-id attribute
+                const buttonId = trashButton.dataset.id;
+                console.log(buttonId);
+                // Send a DELETE request to delete a project
+                const response = await fetch(url + buttonId, {
+                    method: "DELETE",
+                    headers: {
+                        "Content-type": "application/json",
+                        Authorization: `Bearer ${authToken}`,
+                    },
+                });
+                if (response.ok) {
+                } else {
+                    console.log(response.statusText);
+                }
+            } catch (error) {
+                console.error(
+                    "Erreur dans la suppression d'un projet :",
+                    error.message
+                );
+            }
+            fetchProjects();
+        });
+    });
 }
