@@ -645,3 +645,6 @@ footer nav ul {
     cursor: pointer;
     margin: auto;
 }
+.form-ajout .btn-ajout-valid {
+    background-color: #1d6154;
+}

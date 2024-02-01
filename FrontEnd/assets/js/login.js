@@ -2,16 +2,15 @@
 //The event is triggered when the entire DOM is loaded and ready to be manipulated by the script
 document.addEventListener("DOMContentLoaded", function () {
     // Attach a submit event listener to the login form
-    document
-        .getElementById("form-login")
-        .addEventListener("submit", function (e) {
-            e.preventDefault();
-            loginUser();
-        });
+    const formLogin = document.getElementById("form-login");
+    formLogin.addEventListener("submit", function (e) {
+        e.preventDefault();
+        loginUser();
+    });
+    console.log(formLogin);
 });
 
 async function loginUser() {
-    // Definition of the API URL
     const url = "http://localhost:5678/api/users/login";
 
     // Retrieve user input from the form
@@ -26,19 +25,15 @@ async function loginUser() {
     };
 
     try {
-        // Using the fetch function to make an HTTP POST request
         const response = await fetch(url, {
-            method: "POST", // Specifying the HTTP method
+            method: "POST",
             headers: {
-                Accept: "application/json", // Indicating that the client accepts responses in JSON format
-
-                "Content-Type": "application/json", // Indicating the content type of the request as JSON
+                Accept: "application/json",
+                "Content-Type": "application/json",
             },
-            body: JSON.stringify(data), // Converting the data to JSON and sending it in the request body
+            body: JSON.stringify(data),
         });
-        // alert("Vous êtes connecté ^^");
         if (response.ok) {
-            // Handling the successful response
             const responseData = await response.json();
 
             // Store the authentication token in localStorage
@@ -62,7 +57,7 @@ async function loginUser() {
     }
 }
 
-// Function to check if the user is authenticated and show the "edition" div
+// Function to check if the user is authenticated and show the "edition" and "modify" parts
 function checkAuthentication() {
     // Retrieve the "edition" div container
     const editionContainer = document.getElementById("edition");
@@ -89,5 +84,4 @@ function checkAuthentication() {
     }
 }
 
-// Call the checkAuthentication function when the page loads
-window.addEventListener("load", checkAuthentication);
+checkAuthentication();

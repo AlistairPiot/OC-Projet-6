@@ -1,7 +1,7 @@
-import { fetchProjectsAndUpdate } from "./common.js";
+import { dislayProjectsAndUpdate, filterProjects } from "./externalFunction.js";
 
-// Call the fetchProjects function when the page loads
-window.addEventListener("load", fetchProjectsAndUpdate);
+// Call the dislayProjectsAndUpdate function when the page loads
+window.addEventListener("load", dislayProjectsAndUpdate);
 
 //*--- Step 1.2 : Add buttons + active class ---*//
 // Retrieve the div element with the "group-buttons" class

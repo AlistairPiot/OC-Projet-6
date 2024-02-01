@@ -1,6 +1,5 @@
-//*--- Step 1.1 : Retrieving jobs from the back-end ---*//
-// Function to perform the Fetch request and manipulate the data
-export async function fetchProjectsAndUpdate() {
+//* Retrieving projects *//
+export async function dislayProjectsAndUpdate() {
     try {
         const response = await fetch("http://localhost:5678/api/works");
         const projects = await response.json();
@@ -14,7 +13,7 @@ export async function fetchProjectsAndUpdate() {
     }
 }
 
-//*--- Step 1.1 : Project recovery / 1.2 : Function to filter projects based on category ---*//
+//* Filter projects based on category *//
 export function filterProjects(categoryId) {
     // Get projects from global variable
     const projects = window.projects;
@@ -51,8 +50,8 @@ export function filterProjects(categoryId) {
         gallery.appendChild(projectElement);
     });
 }
-// Fonction pour mettre à jour les projets dans la modal
 
+//* Updating projects in the modal *//
 function updateProjectsInModal(projects) {
     const gridProjects = document.querySelector(".grid-projects");
     gridProjects.innerHTML = "";
@@ -63,7 +62,7 @@ function updateProjectsInModal(projects) {
         const deleteIcon = document.createElement("i");
         const div = document.createElement("div");
 
-        // Ajoutez l'ID du projet comme une donnée personnalisée (data-id)
+        // Add the project ID as custom data (data-id)
         div.setAttribute("data-id", project.id);
 
         imgElement.src = project.imageUrl;
@@ -79,24 +78,13 @@ function updateProjectsInModal(projects) {
         //Add project to the grid Projects
         gridProjects.appendChild(projectElement);
     });
-    deleteWorks(); // Assurez-vous d'appeler deleteWorks après la mise à jour des projets
+    deleteProjects();
 }
 
-// //* Delete a project *//
-export function deleteWorks() {
-    // Definition of the API URL
+//* Delete a project *//
+export function deleteProjects() {
     const url = "http://localhost:5678/api/works/";
-    // Retrieve the token
     const authToken = localStorage.getItem("authToken");
-
-    // Check that authToken is not null
-    if (!authToken) {
-        console.log("Aucun authToken trouvé");
-        // "return" to exit the function
-        return;
-    }
-
-    // Check that all mandatory fields have been completed
     const trashButtons = document.querySelectorAll(".div-trash");
 
     trashButtons.forEach((trashButton) => {
@@ -104,7 +92,6 @@ export function deleteWorks() {
             try {
                 // Retrieving the project ID from the data-id attribute
                 const buttonId = trashButton.dataset.id;
-                // Send a DELETE request to delete a project
                 const response = await fetch(url + buttonId, {
                     method: "DELETE",
                     headers: {
@@ -114,7 +101,7 @@ export function deleteWorks() {
                 });
                 if (response.ok) {
                     alert("Projet supprimé");
-                    fetchProjectsAndUpdate();
+                    dislayProjectsAndUpdate();
                 } else {
                     console.log(response.statusText);
                 }

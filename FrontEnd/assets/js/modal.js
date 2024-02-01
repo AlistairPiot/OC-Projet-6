@@ -1,5 +1,4 @@
-import { fetchProjectsAndUpdate } from "./common.js";
-//* Displaying projects with an API *//
+import { dislayProjectsAndUpdate } from "./externalFunction.js";
 
 //* Modal 1 *//
 // Recovery of DOM elements modal 1
@@ -13,14 +12,14 @@ const overlayModal1 = document.querySelector(".overlay-js");
 btnOpen.addEventListener("click", openModal);
 function openModal() {
     modalContainer.classList.add("active");
-    fetchProjectsAndUpdate();
+    dislayProjectsAndUpdate();
 }
 
 // Close the modal when the close button is clicked
 btnClose.addEventListener("click", closeModal);
 function closeModal() {
     modalContainer.classList.remove("active");
-    fetchProjectsAndUpdate();
+    dislayProjectsAndUpdate();
 }
 
 // Close the modal when the user clicks outside
@@ -58,7 +57,6 @@ function closeAllModal() {
 
 // Close the modal when the user clicks outside
 overlayModal2.addEventListener("click", function (event) {
-    // Check that the element clicked is the overlay itself (and not a child element)
     if (event.target === overlayModal2) {
         closeAllModal();
     }
@@ -77,14 +75,16 @@ document.getElementById("image").addEventListener("change", function (e) {
 
         reader.onload = function (e) {
             previewImage.src = e.target.result;
-            previewContainer.style.display = "block"; // Show preview
+            // Show preview
+            previewContainer.style.display = "block";
             fileLabel.classList.add("active");
         };
 
         reader.readAsDataURL(file);
     } else {
         previewImage.src = "#";
-        previewContainer.style.display = "none"; // Hide preview
+        // Hide preview
+        previewContainer.style.display = "none";
     }
 });
 
@@ -116,34 +116,27 @@ function completedFormChangeColor() {
 
         // Update button colour according to field status
         if (isImageFilled && isTitreFilled && isCategorieFilled) {
-            btnValider.style.backgroundColor = "#1D6154";
+            btnValider.classList.add("btn-ajout-valid");
         } else {
-            btnValider.style.backgroundColor = "";
+            btnValider.classList.remove("btn-ajout-valid");
         }
     });
 }
 
 //* Add project *//
 async function formAjout() {
-    // Definition of the API URL
     const url = "http://localhost:5678/api/works";
+
     // Retrieve values from the form
     const titre = document.getElementById("titre").value;
     const categorie = document.getElementById("categorie").value;
     const authToken = localStorage.getItem("authToken");
 
-    // Check that authToken is not null
-    if (!authToken) {
-        console.log("Aucun authToken trouvé");
-        // "return" to exit the function
-        return;
-    }
-
     // Retrieve the image URL
     const fileInput = document.getElementById("image");
     const imageFile = fileInput.files[0];
 
-    // Check that all mandatory fields have been completed
+    // Check that all fields have been completed
     if (titre && categorie && imageFile) {
         // Create the data object to be sent to the API
         const formData = new FormData();
@@ -152,7 +145,6 @@ async function formAjout() {
         formData.append("category", categorie);
 
         try {
-            // Send a POST request to add the new project
             const response = await fetch(url, {
                 method: "POST",
                 headers: {
@@ -169,7 +161,7 @@ async function formAjout() {
         } catch (error) {
             console.error("Erreur dans la requête fetch :", error.message);
         }
-        fetchProjectsAndUpdate();
+        dislayProjectsAndUpdate();
     } else {
         alert("Veuillez remplir tous les champs.");
     }
