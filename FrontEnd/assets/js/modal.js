@@ -20,6 +20,7 @@ btnClose.addEventListener("click", closeModal);
 function closeModal() {
     modalContainer.classList.remove("active");
     dislayProjectsAndUpdate();
+    resetPreviewContainer();
 }
 
 // Close the modal when the user clicks outside
@@ -28,6 +29,7 @@ overlayModal1.addEventListener("click", function (event) {
     if (event.target === overlayModal1) {
         closeModal();
     }
+    resetPreviewContainer();
 });
 
 //* Modal 2 *//
@@ -46,6 +48,7 @@ function openModalAjout() {
 returnArrow.addEventListener("click", closeModal2);
 function closeModal2() {
     modalContainer2.classList.remove("active");
+    resetPreviewContainer();
 }
 
 // Close the modal2 and the modal1 when the close button is clicked
@@ -53,6 +56,7 @@ btnClose2.addEventListener("click", closeAllModal);
 function closeAllModal() {
     modalContainer2.classList.remove("active");
     closeModal();
+    resetPreviewContainer();
 }
 
 // Close the modal when the user clicks outside
@@ -60,6 +64,7 @@ overlayModal2.addEventListener("click", function (event) {
     if (event.target === overlayModal2) {
         closeAllModal();
     }
+    resetPreviewContainer();
 });
 
 // Display the selected image
@@ -82,11 +87,20 @@ document.getElementById("image").addEventListener("change", function (e) {
 
         reader.readAsDataURL(file);
     } else {
-        previewImage.src = "#";
-        // Hide preview
-        previewContainer.style.display = "none";
+        resetPreviewContainer();
     }
 });
+
+function resetPreviewContainer() {
+    const previewContainer = document.querySelector(".image-preview-container");
+    const previewImage = document.getElementById("preview-image");
+    const fileLabel = document.getElementById("file-label-js");
+
+    previewImage.src = "#";
+    // Hide preview
+    previewContainer.style.display = "none";
+    fileLabel.classList.remove("active");
+}
 
 // ----------------
 document.addEventListener("DOMContentLoaded", function () {
@@ -96,6 +110,7 @@ document.addEventListener("DOMContentLoaded", function () {
         .addEventListener("submit", function (e) {
             e.preventDefault();
             formAjout();
+            resetPreviewContainer();
         });
 });
 
@@ -154,14 +169,14 @@ async function formAjout() {
             });
             if (response.ok) {
                 alert("Nouveau projet ajouté");
-                window.location.href = "../../index.html";
+                dislayProjectsAndUpdate();
+                // window.location.href = "../../index.html";
             } else {
                 console.log(response.statusText);
             }
         } catch (error) {
             console.error("Erreur dans la requête fetch :", error.message);
         }
-        dislayProjectsAndUpdate();
     } else {
         alert("Veuillez remplir tous les champs.");
     }
