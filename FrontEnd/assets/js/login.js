@@ -63,6 +63,8 @@ function checkAuthentication() {
     const editionContainer = document.getElementById("edition");
     const editMode = document.querySelector(".edit-mode");
     const groupButtons = document.querySelector(".group-buttons");
+    const login = document.querySelector(".login-js");
+    const logout = document.querySelector(".logout-js");
 
     // Check if the authentication token is present in localStorage
     const authToken = localStorage.getItem("authToken");
@@ -74,10 +76,12 @@ function checkAuthentication() {
             editionContainer.style.display = "flex";
             editMode.style.display = "flex";
             groupButtons.style.display = "none";
+            login.style.display = "none";
         } else {
             editionContainer.style.display = "none";
             editMode.style.display = "none";
             groupButtons.style.display = "flex";
+            logout.style.display = "none";
         }
     } else {
         console.error("Element with ID 'edition' not found.");
@@ -85,3 +89,16 @@ function checkAuthentication() {
 }
 
 checkAuthentication();
+
+// Function Logout
+function logout() {
+    const logoutButton = document.querySelector(".logout-js");
+
+    logoutButton.addEventListener("click", (e) => {
+        e.preventDefault();
+        localStorage.removeItem("authToken");
+
+        window.location.href = "../../index.html";
+    });
+}
+logout();
