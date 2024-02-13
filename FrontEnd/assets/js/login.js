@@ -1,14 +1,17 @@
 //*--- Step 2.2 : User authentication ---*//
 //The event is triggered when the entire DOM is loaded and ready to be manipulated by the script
-document.addEventListener("DOMContentLoaded", function () {
-    // Attach a submit event listener to the login form
-    const formLogin = document.getElementById("form-login");
-    formLogin.addEventListener("submit", function (e) {
-        e.preventDefault();
-        loginUser();
+function setupLoginFormListener() {
+    document.addEventListener("DOMContentLoaded", function () {
+        // Attach a submit event listener to the login form
+        const formLogin = document.getElementById("form-login");
+        formLogin.addEventListener("submit", function (e) {
+            e.preventDefault();
+            loginUser();
+        });
+        console.log(formLogin);
     });
-    console.log(formLogin);
-});
+}
+setupLoginFormListener();
 
 async function loginUser() {
     const url = "http://localhost:5678/api/users/login";

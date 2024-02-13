@@ -1,95 +1,118 @@
 import { dislayProjectsAndUpdate } from "./externalFunction.js";
 
 //* Modal 1 *//
-// Recovery of DOM elements modal 1
-const modalContainer = document.querySelector(".modal-container-js");
-const btnOpen = document.querySelector(".modal-btn-open-js");
-const btnClose = document.getElementById("icon-close");
-const btnAjout = document.querySelector(".btn-ajout-js");
-const overlayModal1 = document.querySelector(".overlay-js");
-
 // Open the modal when the trigger button "modifier" is clicked
-btnOpen.addEventListener("click", openModal);
 function openModal() {
+    const btnOpen = document.querySelector(".modal-btn-open-js");
+    const modalContainer = document.querySelector(".modal-container-js");
+    btnOpen.addEventListener("click", openModal);
     modalContainer.classList.add("active");
     dislayProjectsAndUpdate();
 }
+openModal();
 
 // Close the modal when the close button is clicked
-btnClose.addEventListener("click", closeModal);
 function closeModal() {
+    const btnClose = document.getElementById("icon-close");
+    const modalContainer = document.querySelector(".modal-container-js");
+    btnClose.addEventListener("click", closeModal);
     modalContainer.classList.remove("active");
     dislayProjectsAndUpdate();
     resetPreviewContainer();
 }
+closeModal();
 
 // Close the modal when the user clicks outside
-overlayModal1.addEventListener("click", function (event) {
-    // Check that the element clicked is the overlay itself (and not a child element)
-    if (event.target === overlayModal1) {
-        closeModal();
-    }
-    resetPreviewContainer();
-});
-
-//* Modal 2 *//
-const modalContainer2 = document.querySelector(".modal-container-2-js");
-const btnClose2 = document.getElementById("icon-close-2");
-const returnArrow = document.getElementById("icon-return-js");
-const overlayModal2 = document.querySelector(".overlay-2-js");
+function overlayModalOne() {
+    const overlayModal1 = document.querySelector(".overlay-js");
+    overlayModal1.addEventListener("click", function (event) {
+        // Check that the element clicked is the overlay itself (and not a child element)
+        if (event.target === overlayModal1) {
+            closeModal();
+        }
+        resetPreviewContainer();
+    });
+}
+overlayModalOne();
 
 // Open the Modal2 the trigger button "Ajouter une photo" is clicked
-btnAjout.addEventListener("click", openModalAjout);
-function openModalAjout() {
-    modalContainer2.classList.add("active");
+function btnAjoutOpen() {
+    const btnAjout = document.querySelector(".btn-ajout-js");
+    btnAjout.addEventListener("click", openModalAjout);
+    function openModalAjout() {
+        const modalContainer2 = document.querySelector(".modal-container-2-js");
+        modalContainer2.classList.add("active");
+    }
 }
+btnAjoutOpen();
 
 // Return to the modal1 when the "returnArrow" is clicked
-returnArrow.addEventListener("click", closeModal2);
-function closeModal2() {
-    modalContainer2.classList.remove("active");
-    resetPreviewContainer();
+function closeModalBackArrow() {
+    const returnArrow = document.getElementById("icon-return-js");
+    returnArrow.addEventListener("click", closeModal2);
+    function closeModal2() {
+        const modalContainer2 = document.querySelector(".modal-container-2-js");
+        modalContainer2.classList.remove("active");
+        resetPreviewContainer();
+    }
 }
+closeModalBackArrow();
 
-// Close the modal2 and the modal1 when the close button is clicked
-btnClose2.addEventListener("click", closeAllModal);
+// Close all modals
 function closeAllModal() {
+    const modalContainer2 = document.querySelector(".modal-container-2-js");
     modalContainer2.classList.remove("active");
     closeModal();
     resetPreviewContainer();
 }
 
+// Close the modal2 and the modal1 when the close button is clicked
+function btnCloseCross() {
+    const btnClose2 = document.getElementById("icon-close-2");
+    btnClose2.addEventListener("click", closeAllModal);
+}
+btnCloseCross();
+
 // Close the modal when the user clicks outside
-overlayModal2.addEventListener("click", function (event) {
-    if (event.target === overlayModal2) {
-        closeAllModal();
-    }
-    resetPreviewContainer();
-});
+function overlayModalTwo() {
+    const overlayModal2 = document.querySelector(".overlay-2-js");
+    overlayModal2.addEventListener("click", function (event) {
+        if (event.target === overlayModal2) {
+            closeAllModal();
+        }
+        resetPreviewContainer();
+    });
+}
+overlayModalTwo();
 
 // Display the selected image
-document.getElementById("image").addEventListener("change", function (e) {
-    const previewContainer = document.querySelector(".image-preview-container");
-    const previewImage = document.getElementById("preview-image");
-    const fileLabel = document.getElementById("file-label-js");
-    const fileInput = e.target;
-    const file = fileInput.files[0];
+function previewImageOnChange() {
+    document.getElementById("image").addEventListener("change", function (e) {
+        const previewContainer = document.querySelector(
+            ".image-preview-container"
+        );
+        const previewImage = document.getElementById("preview-image");
+        const fileLabel = document.getElementById("file-label-js");
+        const fileInput = e.target;
+        const file = fileInput.files[0];
 
-    if (file) {
-        const reader = new FileReader();
+        if (file) {
+            const reader = new FileReader();
 
-        reader.onload = function (e) {
-            previewImage.src = e.target.result;
-            // Show preview
-            previewContainer.style.display = "block";
-            fileLabel.classList.add("active");
-        };
+            reader.onload = function (e) {
+                previewImage.src = e.target.result;
+                // Show preview
+                previewContainer.style.display = "block";
+                fileLabel.classList.add("active");
+            };
 
-        reader.readAsDataURL(file);
-    } else {
-        resetPreviewContainer();
-    }
-});
+            reader.readAsDataURL(file);
+        } else {
+            resetPreviewContainer();
+        }
+    });
+}
+previewImageOnChange();
 
 function resetPreviewContainer() {
     const previewContainer = document.querySelector(".image-preview-container");
@@ -102,17 +125,19 @@ function resetPreviewContainer() {
     fileLabel.classList.remove("active");
 }
 
-// ----------------
-document.addEventListener("DOMContentLoaded", function () {
-    completedFormChangeColor();
-    document
-        .getElementById("form-ajout")
-        .addEventListener("submit", function (e) {
-            e.preventDefault();
-            formAjout();
-            resetPreviewContainer();
-        });
-});
+function setupFormAjoutListener() {
+    document.addEventListener("DOMContentLoaded", function () {
+        completedFormChangeColor();
+        document
+            .getElementById("form-ajout")
+            .addEventListener("submit", function (e) {
+                e.preventDefault();
+                formAjout();
+                resetPreviewContainer();
+            });
+    });
+}
+setupFormAjoutListener();
 
 function completedFormChangeColor() {
     // Selecting the form and fields

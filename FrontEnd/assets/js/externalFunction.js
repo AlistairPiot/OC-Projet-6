@@ -19,11 +19,15 @@ export function filterProjects(categoryId) {
     const projects = window.projects;
 
     // Filter projects based on the category
-    const filteredProjects =
-        categoryId === 0
-            ? projects
-            : projects.filter((project) => project.categoryId === categoryId);
+    let filteredProjects;
 
+    if (categoryId !== 0) {
+        filteredProjects = projects.filter(
+            (project) => project.categoryId === categoryId
+        );
+    } else {
+        filteredProjects = projects;
+    }
     // Retrieving the gallery from the DOM
     const gallery = document.querySelector(".gallery");
 
